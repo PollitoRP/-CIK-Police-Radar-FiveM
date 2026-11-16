@@ -5,6 +5,7 @@
 let audioEnabled = true;
 let speedUnit = 'KMH';
 let fastLimit = 120;
+let currentTheme = 'modern_hud';
 let isAudioContextInit = false;
 let audioCtx = null;
 
@@ -44,6 +45,7 @@ const rcToggleRear = document.getElementById('rc-toggle-rear');
 const rcLockFront = document.getElementById('rc-lock-front');
 const rcLockRear = document.getElementById('rc-lock-rear');
 const rcUnlockAll = document.getElementById('rc-unlock-all');
+const rcToggleTheme = document.getElementById('rc-toggle-theme');
 const rcToggleUnit = document.getElementById('rc-toggle-unit');
 const rcToggleAudio = document.getElementById('rc-toggle-audio');
 const rcLimitMinus = document.getElementById('rc-limit-minus');
@@ -175,13 +177,33 @@ function applyFeaturesConfig(features) {
     if (remoteBtn) remoteBtn.style.display = features.EnableRemoteControl ? 'block' : 'none';
 }
 
-// Formatear 3 dígitos (ej: 45 -> 045)
+// Cambiar y aplicar tema estético
+function applyTheme(theme) {
+    currentTheme = theme || 'modern_hud';
+    radarContainer.classList.remove('theme-modern-hud', 'theme-classic-radar');
+    
+    if (currentTheme === 'classic_radar') {
+        radarContainer.classList.add('theme-classic-radar');
+        if (rcToggleTheme) rcToggleTheme.textContent = 'TEMA: CLÁSICO';
+    } else {
+        radarContainer.classList.add('theme-modern-hud');
+        if (rcToggleTheme) rcToggleTheme.textContent = 'TEMA: HUD';
+    }
+}
+
+// Formatear velocidad según el tema (HUD = 0, 45 / CLÁSICO = 000, 045)
 function padSpeed(speed) {
-    if (speed === null || speed === undefined || isNaN(speed)) return '---';
+    if (speed === null || speed === undefined || isNaN(speed)) {
+        return currentTheme === 'classic_radar' ? '---' : '0';
+    }
     const num = Math.round(speed);
-    if (num < 0) return '000';
-    if (num < 10) return '00' + num;
-    if (num < 100) return '0' + num;
+    if (num < 0) return '0';
+    
+    if (currentTheme === 'classic_radar') {
+        if (num < 10) return '00' + num;
+        if (num < 100) return '0' + num;
+        return '' + num;
+    }
     return '' + num;
 }
 
@@ -192,6 +214,12 @@ window.addEventListener('message', function (event) {
 
     if (data.action === 'openRadar') {
         radarContainer.style.display = 'block';
+        if (data.theme) {
+            applyTheme(data.theme);
+        } else {
+            const savedTheme = localStorage.getItem('cik_radar_theme') || 'modern_hud';
+            applyTheme(savedTheme);
+        }
         if (data.features) applyFeaturesConfig(data.features);
         if (data.speedUnit) {
             speedUnit = data.speedUnit;
@@ -205,8 +233,14 @@ window.addEventListener('message', function (event) {
         radarContainer.style.display = 'none';
         remoteContainer.style.display = 'none';
     } else if (data.action === 'updateRadarData') {
-        // Velocidad patrulla
+        // Velocidad patrulla y barra de progreso
         patrolSpeed.textContent = padSpeed(data.patrolSpeed);
+        const patrolBarFill = document.querySelector('.patrol-bar-fill');
+        if (patrolBarFill) {
+            const pSpeed = Number(data.patrolSpeed) || 0;
+            const pct = Math.min(100, Math.max(15, (pSpeed / (fastLimit || 120)) * 100));
+            patrolBarFill.style.width = pct + '%';
+        }
 
         // Antena Delantera
         if (data.front) {
@@ -240,29 +274,37 @@ function updateAntennaUI(antenna, info) {
     const plateEl = isFront ? frontPlateText : rearPlateText;
     const modelEl = isFront ? frontModelText : rearModelText;
     const rcLockBtn = isFront ? rcLockFront : rcLockRear;
+    const hudBar = document.getElementById(isFront ? 'front-hud-bar' : 'rear-hud-bar');
 
     // Estado XMIT o HOLD
     if (info.active) {
         modeBadge.textContent = 'XMIT';
-        modeBadge.className = 'mode-badge xmit';
+        modeBadge.className = 'mode-pill xmit';
     } else {
         modeBadge.textContent = 'HOLD';
-        modeBadge.className = 'mode-badge hold';
+        modeBadge.className = 'mode-pill hold';
     }
 
     // Estado Bloqueado o Escaneando
     if (info.locked) {
-        lockBadge.textContent = 'BLOQUEADO';
-        lockBadge.className = 'lock-badge locked';
+        lockBadge.textContent = 'LOCK';
+        lockBadge.className = 'mode-pill locked';
         card.classList.add('locked-state');
+        if (hudBar) {
+            hudBar.classList.add('locked');
+            hudBar.classList.remove('overspeed');
+        }
         if (rcLockBtn) {
             rcLockBtn.classList.add('locked');
             rcLockBtn.textContent = isFront ? 'DESBLOQ DELANTERO' : 'DESBLOQ TRASERO';
         }
     } else {
-        lockBadge.textContent = 'ESCANEANDO';
-        lockBadge.className = 'lock-badge scanning';
+        lockBadge.textContent = 'SCAN';
+        lockBadge.className = 'mode-pill scan';
         card.classList.remove('locked-state');
+        if (hudBar) {
+            hudBar.classList.remove('locked');
+        }
         if (rcLockBtn) {
             rcLockBtn.classList.remove('locked');
             rcLockBtn.textContent = isFront ? 'FIJAR DELANTERO' : 'FIJAR TRASERO';
@@ -279,18 +321,26 @@ function updateAntennaUI(antenna, info) {
         // Alerta de exceso de velocidad
         if (info.isOverSpeed) {
             targetEl.classList.add('alert-overspeed');
+            if (hudBar) hudBar.classList.add('overspeed');
         } else {
             targetEl.classList.remove('alert-overspeed');
+            if (hudBar) hudBar.classList.remove('overspeed');
+        }
+
+        // Barra inferior amarilla proporcional
+        if (hudBar && !info.locked) {
+            const pct = Math.min(100, Math.max(15, (Number(info.targetSpeed) / (fastLimit || 120)) * 100));
+            hudBar.style.width = pct + '%';
         }
 
         // Dirección
         if (info.direction === 'SAME') {
             dirArrow.textContent = '▲';
-            dirArrow.style.color = '#38bdf8';
+            dirArrow.style.color = '#ffff00';
             dirText.textContent = 'MISMO';
         } else if (info.direction === 'OPP') {
             dirArrow.textContent = '▼';
-            dirArrow.style.color = '#f97316';
+            dirArrow.style.color = '#ff9900';
             dirText.textContent = 'CONT';
         } else {
             dirArrow.textContent = '--';
@@ -301,8 +351,12 @@ function updateAntennaUI(antenna, info) {
         plateEl.textContent = info.plate || '--------';
         modelEl.textContent = info.model || 'DESCONOCIDO';
     } else if (!info.locked) {
-        targetEl.textContent = '---';
+        targetEl.textContent = '0';
         targetEl.classList.remove('alert-overspeed');
+        if (hudBar) {
+            hudBar.classList.remove('overspeed');
+            hudBar.style.width = '10%';
+        }
         dirArrow.textContent = '--';
         dirText.textContent = '--';
         plateEl.textContent = '--------';
@@ -355,6 +409,13 @@ rcLockRear.addEventListener('click', () => {
 
 rcUnlockAll.addEventListener('click', () => {
     sendNuiCallback('unlockAll');
+});
+
+rcToggleTheme.addEventListener('click', () => {
+    const nextTheme = currentTheme === 'modern_hud' ? 'classic_radar' : 'modern_hud';
+    applyTheme(nextTheme);
+    localStorage.setItem('cik_radar_theme', nextTheme);
+    sendNuiCallback('changeTheme', { theme: nextTheme });
 });
 
 rcToggleUnit.addEventListener('click', () => {

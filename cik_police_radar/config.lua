@@ -10,6 +10,12 @@ Config.Locale = 'es'
 -- Unidad de medida de velocidad: 'KMH' o 'MPH'
 Config.SpeedUnit = 'KMH'
 
+-- Tema / Estética visual del radar:
+-- Opciones disponibles:
+--   'modern_hud'     -> Estilo minimalista moderno a juego con el HUD (negro puro, barra amarilla, letras itálicas y pastilla blanca)
+--   'classic_radar'  -> Estilo radar policial clásico digital (pantalla digital LED cian/ámbar, panel oscuro y placa tradicional)
+Config.Theme = 'classic_radar'
+
 -- Límite de velocidad rápida por defecto (Alerta de exceso de velocidad)
 -- Si un vehículo detectado supera este límite, parpadeará en rojo y emitirá una alerta sonora.
 Config.DefaultFastLimit = 120

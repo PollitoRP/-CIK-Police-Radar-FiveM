@@ -1,4 +1,8 @@
-/* RESET & CONFIG BÁSICA */
+/* ==========================================================
+   CIK POLICE RADAR - HOJA DE ESTILOS DUAL THEME
+   Soporta: 'theme-modern-hud' y 'theme-classic-radar'
+   ========================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -11,39 +15,27 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
 }
 
 /* ==========================================================
-                    RADAR PRINCIPAL
+                    ESTRUCTURA GENERAL DEL RADAR
    ========================================================== */
 .radar-box {
     position: absolute;
-    bottom: 40px;
-    right: 40px;
-    width: 360px;
-    background: linear-gradient(180deg, #181b20 0%, #101216 100%);
-    border-radius: 12px;
-    border: 2px solid #2a303c;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.05);
-    color: #e2e8f0;
+    bottom: 50px;
+    right: 50px;
     z-index: 999;
-    transition: box-shadow 0.2s ease;
     overflow: hidden;
+    transition: all 0.2s ease;
 }
 
-.radar-box:hover {
-    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.85), 0 0 10px rgba(0, 229, 255, 0.2);
-}
-
-/* HEADER DEL RADAR */
+/* HEADER BASE */
 .radar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 14px;
-    background: #0d0f12;
-    border-bottom: 1px solid #242933;
+    padding: 8px 12px;
     cursor: grab;
 }
 
@@ -57,362 +49,667 @@ body {
     gap: 8px;
 }
 
-.power-led {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #475569;
-    box-shadow: 0 0 2px #475569;
-}
-
-.power-led.active {
-    background: #10b981;
-    box-shadow: 0 0 8px #10b981;
-}
-
-.brand-title {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #94a3b8;
-    text-transform: uppercase;
-}
-
 .header-right {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.header-btn {
+.drag-handle {
+    cursor: grab;
+    user-select: none;
+}
+
+/* TARJETAS DE ANTENA (BASE) */
+.radar-card {
+    padding: 10px 12px 6px 12px;
+    position: relative;
+}
+
+.card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.badge-cluster {
+    display: flex;
+    gap: 5px;
+}
+
+.mode-pill {
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.radar-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.speed-unit-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 65px;
+}
+
+.speed-number-wrap {
+    line-height: 0.9;
+}
+
+.center-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.metric-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+.fast-metric {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.vehicle-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    max-width: 130px;
+}
+
+.plate-pill {
+    border-radius: 4px;
+    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.model-tag {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.patrol-section {
+    padding: 6px 12px;
+}
+
+.patrol-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.patrol-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.patrol-speed-box {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+
+/* ==========================================================
+   TEMA 1: 'theme-modern-hud' (A JUEGO CON EL HUD DE LA FOTO)
+   ========================================================== */
+.radar-box.theme-modern-hud {
+    width: 320px;
+    background: #000000;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+}
+
+.theme-modern-hud .radar-header {
+    background: #080808;
+    border-bottom: 1px solid #18181b;
+}
+
+.theme-modern-hud .yellow-accent-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ffff00;
+    box-shadow: 0 0 8px #ffff00;
+}
+
+.theme-modern-hud .brand-title {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.theme-modern-hud .btn-mando {
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #f4f4f5;
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.theme-modern-hud .btn-mando:hover {
+    background: #ffff00;
+    color: #000000;
+    border-color: #ffff00;
+}
+
+.theme-modern-hud .drag-handle {
+    font-size: 13px;
+    color: #71717a;
+}
+
+.theme-modern-hud .radar-card {
+    background: #000000;
+    border-bottom: 1px solid #141416;
+}
+
+.theme-modern-hud .radar-card.locked-state {
+    background: rgba(220, 38, 38, 0.08);
+}
+
+.theme-modern-hud .antenna-label {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #a1a1aa;
+    text-transform: uppercase;
+}
+
+.theme-modern-hud .mode-pill {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 9px;
+}
+
+.theme-modern-hud .mode-pill.xmit {
+    background: #18181b;
+    color: #ffff00;
+    border: 1px solid rgba(255, 255, 0, 0.3);
+}
+
+.theme-modern-hud .mode-pill.hold {
+    background: #18181b;
+    color: #71717a;
+    border: 1px solid #27272a;
+}
+
+.theme-modern-hud .mode-pill.scan {
+    background: #18181b;
+    color: #ffffff;
+    border: 1px solid #27272a;
+}
+
+.theme-modern-hud .mode-pill.locked {
+    background: #dc2626;
+    color: #ffffff;
+    border: 1px solid #ef4444;
+    animation: flash-lock 1s infinite alternate;
+}
+
+.theme-modern-hud .speed-digits {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 38px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.theme-modern-hud .speed-digits.alert-overspeed {
+    color: #ff2233 !important;
+    animation: flash-overspeed 0.4s infinite alternate;
+}
+
+.theme-modern-hud .speed-sub-label {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 11px;
+    color: #a1a1aa;
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+}
+
+.theme-modern-hud .metric-pill {
+    background: #18181b;
+    border: 1px solid #27272a;
+}
+
+.theme-modern-hud .metric-arrow {
+    font-size: 10px;
+    font-weight: 900;
+    color: #ffff00;
+}
+
+.theme-modern-hud .metric-text {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 9px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.theme-modern-hud .fast-label {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 9px;
+    color: #71717a;
+}
+
+.theme-modern-hud .fast-digits {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 13px;
+    color: #ffff00;
+}
+
+.theme-modern-hud .plate-pill {
+    background: #ffffff;
+    color: #000000;
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.theme-modern-hud .plate-icon {
+    font-size: 11px;
+}
+
+.theme-modern-hud .model-value {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 10px;
+    color: #d4d4d8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* BARRA DE PROGRESO INFERIOR AMARILLA DEL HUD */
+.theme-modern-hud .hud-progress-track {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background: #27272a;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.theme-modern-hud .hud-progress-fill {
+    width: 35%;
+    height: 100%;
+    background: #ffff00;
+    border-radius: 2px;
+    transition: width 0.2s ease, background 0.2s ease;
+}
+
+.theme-modern-hud .hud-progress-fill.locked {
+    width: 100% !important;
+    background: #ef4444 !important;
+}
+
+.theme-modern-hud .hud-progress-fill.overspeed {
+    background: #ef4444 !important;
+    animation: flash-bar 0.4s infinite alternate;
+}
+
+.theme-modern-hud .patrol-section {
+    background: #09090b;
+    border-top: 1px solid #18181b;
+    border-bottom: 1px solid #18181b;
+}
+
+.theme-modern-hud .patrol-icon {
+    font-size: 12px;
+}
+
+.theme-modern-hud .patrol-title {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 10px;
+    color: #71717a;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.theme-modern-hud .patrol-number {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.theme-modern-hud .patrol-unit {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 10px;
+    color: #a1a1aa;
+}
+
+.theme-modern-hud .patrol-bar-track {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #27272a;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.theme-modern-hud .patrol-bar-fill {
+    width: 25%;
+    height: 100%;
+    background: #ffff00;
+    border-radius: 2px;
+}
+
+
+/* ==========================================================
+   TEMA 2: 'theme-classic-radar' (RADAR POLICIAL CLÁSICO DIGITAL)
+   ========================================================== */
+.radar-box.theme-classic-radar {
+    width: 360px;
+    background: linear-gradient(180deg, #181b20 0%, #101216 100%);
+    border-radius: 12px;
+    border: 2px solid #2a303c;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+}
+
+.theme-classic-radar .radar-header {
+    background: #0d0f12;
+    border-bottom: 1px solid #242933;
+}
+
+.theme-classic-radar .yellow-accent-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.theme-classic-radar .brand-title {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.theme-classic-radar .btn-mando {
     background: #1e2430;
     border: 1px solid #334155;
     color: #cbd5e1;
-    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 600;
+    font-size: 10px;
     padding: 3px 8px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.15s ease;
 }
 
-.header-btn:hover {
+.theme-classic-radar .btn-mando:hover {
     background: #334155;
     color: #38bdf8;
     border-color: #38bdf8;
 }
 
-.drag-handle {
+.theme-classic-radar .drag-handle {
     font-size: 14px;
     color: #64748b;
-    cursor: grab;
 }
 
-/* CARDS DE ANTENA */
-.radar-card {
-    padding: 10px 14px;
+.theme-classic-radar .radar-card {
     background: rgba(15, 23, 42, 0.4);
     border-bottom: 1px solid #1f2530;
+    padding: 10px 14px;
 }
 
-.radar-card.locked-state {
-    background: rgba(239, 68, 68, 0.08);
-    box-shadow: inset 0 0 12px rgba(239, 68, 68, 0.2);
+.theme-classic-radar .radar-card.locked-state {
+    background: rgba(239, 68, 68, 0.12);
+    box-shadow: inset 0 0 12px rgba(239, 68, 68, 0.25);
 }
 
-.card-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.antenna-tag {
-    font-size: 10px;
+.theme-classic-radar .antenna-label {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
+    font-size: 10px;
     letter-spacing: 1.2px;
     color: #38bdf8;
     text-transform: uppercase;
 }
 
-.mode-badge {
-    font-size: 9px;
+.theme-classic-radar .mode-pill {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
+    font-size: 9px;
 }
 
-.mode-badge.xmit {
+.theme-classic-radar .mode-pill.xmit {
     background: rgba(16, 185, 129, 0.15);
     color: #34d399;
     border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.mode-badge.hold {
+.theme-classic-radar .mode-pill.hold {
     background: rgba(245, 158, 11, 0.15);
     color: #fbbf24;
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-.lock-badge {
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
-
-.lock-badge.scanning {
+.theme-classic-radar .mode-pill.scan {
     background: rgba(56, 189, 248, 0.12);
     color: #38bdf8;
     border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-.lock-badge.locked {
+.theme-classic-radar .mode-pill.locked {
     background: rgba(239, 68, 68, 0.25);
     color: #f87171;
     border: 1px solid #ef4444;
-    animation: pulse-lock 1.2s infinite;
+    animation: flash-lock 1s infinite alternate;
 }
 
-@keyframes pulse-lock {
-    0% { opacity: 1; }
-    50% { opacity: 0.6; }
-    100% { opacity: 1; }
-}
-
-/* FILA DE VELOCIDADES */
-.speed-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.speed-block {
-    flex: 1;
-    background: #090b0e;
-    border: 1px solid #202633;
-    border-radius: 6px;
-    padding: 4px 6px;
-    text-align: center;
-}
-
-.speed-label {
-    display: block;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: #64748b;
-    margin-bottom: 2px;
-}
-
-.speed-lcd {
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-    gap: 3px;
-}
-
-.digits {
-    font-family: 'Orbitron', 'Share Tech Mono', monospace;
-    font-size: 24px;
+.theme-classic-radar .speed-digits {
+    font-family: 'Orbitron', monospace;
+    font-style: normal;
     font-weight: 900;
+    font-size: 30px;
     color: #00ffcc;
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
     letter-spacing: 1px;
 }
 
-.fast-lcd .digits {
-    color: #fbbf24;
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
-}
-
-.digits.alert-overspeed {
+.theme-classic-radar .speed-digits.alert-overspeed {
     color: #ff3344 !important;
     text-shadow: 0 0 14px rgba(255, 51, 68, 0.8) !important;
-    animation: flash-red 0.5s infinite alternate;
+    animation: flash-overspeed 0.4s infinite alternate;
 }
 
-@keyframes flash-red {
-    from { opacity: 1; }
-    to { opacity: 0.4; }
-}
-
-.unit-label {
-    font-size: 9px;
+.theme-classic-radar .speed-sub-label {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
+    font-size: 9px;
     color: #64748b;
+    margin-top: 2px;
 }
 
-.direction-block {
-    width: 60px;
+.theme-classic-radar .metric-pill {
     background: #090b0e;
     border: 1px solid #202633;
-    border-radius: 6px;
-    padding: 4px 2px;
-    text-align: center;
 }
 
-.dir-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.dir-arrow {
-    font-size: 16px;
+.theme-classic-radar .metric-arrow {
+    font-size: 14px;
     font-weight: 900;
     color: #38bdf8;
-    line-height: 1;
 }
 
-.dir-sub {
-    font-size: 8px;
+.theme-classic-radar .metric-text {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
+    font-size: 8px;
     color: #94a3b8;
-    letter-spacing: 0.5px;
 }
 
-/* INFORMACIÓN DEL VEHÍCULO (MATRÍCULA Y MODELO) */
-.vehicle-info-row {
-    display: flex;
-    gap: 8px;
-}
-
-.veh-info-item {
-    flex: 1;
-}
-
-.info-label {
-    display: block;
-    font-size: 8px;
+.theme-classic-radar .fast-label {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    font-size: 8px;
     color: #64748b;
-    margin-bottom: 2px;
 }
 
-/* MATRÍCULA ESTILO REAL */
-.plate-box {
-    display: flex;
-    align-items: center;
+.theme-classic-radar .fast-digits {
+    font-family: 'Orbitron', monospace;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 15px;
+    color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+.theme-classic-radar .plate-pill {
     background: #f8fafc;
-    border-radius: 4px;
+    color: #0f172a;
     border: 1px solid #cbd5e1;
-    overflow: hidden;
-    height: 24px;
+    font-family: 'Share Tech Mono', monospace;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.plate-badge-eu {
-    background: #1d4ed8;
-    color: #fbbf24;
-    font-size: 10px;
-    padding: 0 5px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
+.theme-classic-radar .plate-icon {
+    color: #1d4ed8;
+    font-size: 12px;
 }
 
-.plate-text {
-    flex: 1;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+.theme-classic-radar .model-value {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
-    color: #0f172a;
-    text-align: center;
-    letter-spacing: 2px;
-}
-
-/* CAJA DE MODELO */
-.model-box {
-    background: #090b0e;
-    border: 1px solid #202633;
-    border-radius: 4px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 6px;
-}
-
-.model-text {
     font-size: 10px;
-    font-weight: 700;
     color: #f1f5f9;
     letter-spacing: 0.8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
 }
 
-/* BARRA DE VELOCIDAD DE TU PATRULLA */
-.patrol-bar {
+/* Ocultar barra de combustible/vida en tema clásico */
+.theme-classic-radar .hud-progress-track {
+    display: none;
+}
+
+.theme-classic-radar .patrol-section {
     background: #0a0c0f;
     border-top: 1px solid #222834;
     border-bottom: 1px solid #222834;
     padding: 8px 14px;
 }
 
-.patrol-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.theme-classic-radar .patrol-icon {
+    font-size: 12px;
 }
 
-.patrol-tag {
-    font-size: 10px;
+.theme-classic-radar .patrol-title {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
+    font-size: 10px;
     color: #94a3b8;
     letter-spacing: 1px;
 }
 
-.patrol-lcd {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.patrol-digits {
-    font-size: 26px;
+.theme-classic-radar .patrol-number {
+    font-family: 'Orbitron', monospace;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
     color: #38bdf8;
     text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
-.patrol-unit {
-    font-size: 10px;
+.theme-classic-radar .patrol-unit {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 700;
+    font-size: 10px;
     color: #64748b;
 }
 
-.status-indicator {
-    font-size: 8px;
-    font-weight: 700;
-    color: #10b981;
-    letter-spacing: 0.8px;
+.theme-classic-radar .patrol-bar-track {
+    display: none;
 }
 
+
 /* ==========================================================
-                 MANDO DE CONTROL REMOTO (NUI)
+                 MANDO CONTROL REMOTO (ESTILO GLOBAL)
    ========================================================== */
 .remote-box {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 320px;
-    background: #13171f;
-    border: 2px solid #334155;
-    border-radius: 14px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 1px 1px rgba(255, 255, 255, 0.1);
-    color: #e2e8f0;
+    width: 310px;
+    background: #0d0f14;
+    border: 2px solid #27272a;
+    border-radius: 10px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+    color: #ffffff;
     z-index: 10000;
     overflow: hidden;
 }
@@ -421,114 +718,120 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #0d1017;
-    padding: 12px 16px;
-    border-bottom: 1px solid #222a38;
+    background: #060709;
+    padding: 10px 14px;
+    border-bottom: 1px solid #1f2530;
 }
 
-.remote-header h3 {
-    font-size: 12px;
+.remote-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.remote-title {
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
     font-weight: 800;
-    letter-spacing: 1px;
-    color: #38bdf8;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    color: #ffffff;
     text-transform: uppercase;
 }
 
 .btn-close {
     background: transparent;
     border: none;
-    color: #94a3b8;
-    font-size: 16px;
+    color: #71717a;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: color 0.15s ease;
 }
 
 .btn-close:hover {
-    color: #f87171;
+    color: #ef4444;
 }
 
 .remote-content {
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 
 .remote-group {
-    background: #0c0e14;
-    border: 1px solid #1f2736;
-    border-radius: 8px;
-    padding: 10px;
+    background: #11141a;
+    border: 1px solid #1e2430;
+    border-radius: 6px;
+    padding: 8px 10px;
 }
 
 .remote-group-title {
-    font-size: 9px;
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
     font-weight: 700;
-    color: #64748b;
+    font-size: 9px;
+    color: #71717a;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .btn-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
 }
 
 .rc-btn {
-    flex: 1 1 calc(50% - 4px);
-    background: #1e2532;
-    border: 1px solid #334155;
-    color: #cbd5e1;
-    font-size: 11px;
+    flex: 1 1 calc(50% - 3px);
+    background: #1b2029;
+    border: 1px solid #2a3342;
+    color: #f4f4f5;
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
     font-weight: 700;
-    padding: 8px 6px;
-    border-radius: 6px;
+    font-size: 10px;
+    padding: 7px 6px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.15s ease;
     text-align: center;
 }
 
 .rc-btn:hover {
-    background: #2a3445;
+    background: #2a3444;
     color: #ffffff;
-    border-color: #38bdf8;
-}
-
-.rc-btn:active {
-    transform: scale(0.98);
 }
 
 .rc-btn.active {
-    background: #0ea5e9;
-    color: #ffffff;
-    border-color: #38bdf8;
-    box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
-}
-
-.rc-btn.btn-lock {
-    background: #1f2937;
-    border-color: #4b5563;
+    background: #ffff00;
+    color: #000000;
+    border-color: #ffff00;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
 }
 
 .rc-btn.btn-lock.locked {
     background: #dc2626;
-    color: #fff;
+    color: #ffffff;
     border-color: #ef4444;
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
 }
 
-.rc-btn.btn-warning {
-    background: #372314;
-    border-color: #78350f;
-    color: #fbbf24;
+.rc-btn.btn-yellow-action {
+    background: #1a1e26;
+    color: #ffff00;
+    border-color: rgba(255, 255, 0, 0.3);
 }
 
-.rc-btn.btn-warning:hover {
-    background: #78350f;
-    color: #fff;
+.rc-btn.btn-yellow-action:hover {
+    background: #ffff00;
+    color: #000000;
+}
+
+.rc-btn.btn-secondary {
+    background: #14171d;
+    color: #a1a1aa;
 }
 
 .full-width {
@@ -539,19 +842,20 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #141923;
-    border-radius: 6px;
-    padding: 6px 12px;
+    background: #161b24;
+    border-radius: 4px;
+    padding: 4px 10px;
 }
 
 .rc-btn-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #1e2533;
-    border: 1px solid #3b485d;
-    color: #38bdf8;
-    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background: #232a38;
+    border: none;
+    color: #ffffff;
+    font-family: 'Kanit', sans-serif;
+    font-size: 14px;
     font-weight: 900;
     cursor: pointer;
     display: flex;
@@ -561,14 +865,30 @@ body {
 }
 
 .rc-btn-circle:hover {
-    background: #0284c7;
-    color: white;
+    background: #ffff00;
+    color: #000000;
 }
 
 .limit-val {
-    font-family: 'Orbitron', monospace;
-    font-size: 16px;
-    font-weight: 700;
-    color: #f59e0b;
+    font-family: 'Kanit', sans-serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 14px;
+    color: #ffff00;
 }
 
+/* ANIMACIONES COMPARTIDAS */
+@keyframes flash-lock {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+}
+
+@keyframes flash-overspeed {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.6; transform: scale(1.03); }
+}
+
+@keyframes flash-bar {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
+}

@@ -179,7 +179,8 @@ function ToggleRadar(forceState)
             action = 'openRadar',
             features = Config.Features,
             speedUnit = speedUnit,
-            fastLimit = fastLimit
+            fastLimit = fastLimit,
+            theme = Config.Theme or 'modern_hud'
         })
     else
         isRadarOpen = false
@@ -581,6 +582,13 @@ end)
 RegisterNUICallback('setFastLimit', function(data, cb)
     if data.limit then
         fastLimit = tonumber(data.limit)
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('changeTheme', function(data, cb)
+    if data.theme then
+        Config.Theme = data.theme
     end
     cb('ok')
 end)

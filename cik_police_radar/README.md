@@ -106,6 +106,7 @@ Config.Features = {
 ```
 
 ### Otras opciones configurables:
+- `Config.Theme = 'modern_hud'` (`'modern_hud'` = estilo a juego con el HUD negro y amarillo; `'classic_radar'` = estilo radar digital clásico cian y ámbar)
 - `Config.AllowedSeats = 'all'` (`'all'` = todos los ocupantes, `'copilot'` = solo copiloto, `'driver'` = solo conductor, `'front'` = conductor y copiloto)
 - `Config.SpeedUnit = 'KMH'` o `'MPH'`
 - `Config.DefaultFastLimit = 120` (Límite en km/h o mph para activar alertas)

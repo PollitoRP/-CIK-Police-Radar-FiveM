@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIK Police Radar</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- CONTENEDOR PRINCIPAL DEL RADAR (ARRASTRABLE) -->
+    <div id="radar-container" class="radar-box" style="display: none;">
+        
+        <!-- BARRA SUPERIOR DE CONTROL Y ARRASTRE -->
+        <div id="radar-header" class="radar-header">
+            <div class="header-left">
+                <span class="power-led active"></span>
+                <span class="brand-title">CIK POLICE RADAR</span>
+            </div>
+            <div class="header-right">
+                <button id="btn-open-remote" title="Abrir Control Remoto" class="header-btn">⚙ MANDO</button>
+                <div class="drag-handle" title="Arrastrar para mover">⠿</div>
+            </div>
+        </div>
+
+        <!-- ANTENA DELANTERA (FRONT) -->
+        <div id="front-radar-card" class="radar-card front-card">
+            <div class="card-title-row">
+                <span class="antenna-tag">ANTENA DELANTERA</span>
+                <span id="front-mode-badge" class="mode-badge xmit">XMIT</span>
+                <span id="front-lock-badge" class="lock-badge scanning">ESCANEANDO</span>
+            </div>
+
+            <!-- VELOCIDADES DELANTERAS -->
+            <div class="speed-row">
+                <div class="speed-block" id="block-front-target">
+                    <span class="speed-label">OBJETIVO</span>
+                    <div class="speed-lcd">
+                        <span id="front-target-speed" class="digits">---</span>
+                        <span class="unit-label speed-unit-text">KM/H</span>
+                    </div>
+                </div>
+
+                <div class="direction-block" id="block-front-dir">
+                    <span class="speed-label">SENTIDO</span>
+                    <div class="dir-indicator">
+                        <span id="front-dir-arrow" class="dir-arrow">--</span>
+                        <span id="front-dir-text" class="dir-sub">--</span>
+                    </div>
+                </div>
+
+                <div class="speed-block" id="block-front-fast">
+                    <span class="speed-label">RÁPIDO</span>
+                    <div class="speed-lcd fast-lcd">
+                        <span id="front-fast-speed" class="digits">---</span>
+                        <span class="unit-label speed-unit-text">KM/H</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETALLES DEL VEHÍCULO DELANTERO -->
+            <div class="vehicle-info-row">
+                <div class="veh-info-item" id="block-front-plate">
+                    <span class="info-label">MATRÍCULA</span>
+                    <div class="plate-box">
+                        <span class="plate-badge-eu">★</span>
+                        <span id="front-plate-text" class="plate-text">--------</span>
+                    </div>
+                </div>
+                <div class="veh-info-item" id="block-front-model">
+                    <span class="info-label">MODELO</span>
+                    <div class="model-box">
+                        <span id="front-model-text" class="model-text">SIN OBJETIVO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VELOCIDAD DE TU PATRULLA (PATROL SPEED) -->
+        <div id="patrol-radar-card" class="patrol-bar">
+            <div class="patrol-inner">
+                <span class="patrol-tag">VELOCIDAD PATRULLA</span>
+                <div class="patrol-lcd">
+                    <span id="patrol-speed" class="digits patrol-digits">000</span>
+                    <span class="patrol-unit speed-unit-text">KM/H</span>
+                </div>
+                <div class="patrol-status">
+                    <span class="status-indicator">SISTEMA ACTIVO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTENA TRASERA (REAR) -->
+        <div id="rear-radar-card" class="radar-card rear-card">
+            <div class="card-title-row">
+                <span class="antenna-tag">ANTENA TRASERA</span>
+                <span id="rear-mode-badge" class="mode-badge xmit">XMIT</span>
+                <span id="rear-lock-badge" class="lock-badge scanning">ESCANEANDO</span>
+            </div>
+
+            <!-- VELOCIDADES TRASERAS -->
+            <div class="speed-row">
+                <div class="speed-block" id="block-rear-target">
+                    <span class="speed-label">OBJETIVO</span>
+                    <div class="speed-lcd">
+                        <span id="rear-target-speed" class="digits">---</span>
+                        <span class="unit-label speed-unit-text">KM/H</span>
+                    </div>
+                </div>
+
+                <div class="direction-block" id="block-rear-dir">
+                    <span class="speed-label">SENTIDO</span>
+                    <div class="dir-indicator">
+                        <span id="rear-dir-arrow" class="dir-arrow">--</span>
+                        <span id="rear-dir-text" class="dir-sub">--</span>
+                    </div>
+                </div>
+
+                <div class="speed-block" id="block-rear-fast">
+                    <span class="speed-label">RÁPIDO</span>
+                    <div class="speed-lcd fast-lcd">
+                        <span id="rear-fast-speed" class="digits">---</span>
+                        <span class="unit-label speed-unit-text">KM/H</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETALLES DEL VEHÍCULO TRASERO -->
+            <div class="vehicle-info-row">
+                <div class="veh-info-item" id="block-rear-plate">
+                    <span class="info-label">MATRÍCULA</span>
+                    <div class="plate-box">
+                        <span class="plate-badge-eu">★</span>
+                        <span id="rear-plate-text" class="plate-text">--------</span>
+                    </div>
+                </div>
+                <div class="veh-info-item" id="block-rear-model">
+                    <span class="info-label">MODELO</span>
+                    <div class="model-box">
+                        <span id="rear-model-text" class="model-text">SIN OBJETIVO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PANEL DEL CONTROL REMOTO (MANDO INTERACTIVO NUI) -->
+    <div id="remote-container" class="remote-box" style="display: none;">
+        <div class="remote-header">
+            <h3>CONTROL REMOTO RADAR</h3>
+            <button id="btn-close-remote" class="btn-close">✕</button>
+        </div>
+        
+        <div class="remote-content">
+            <!-- SECCIÓN ANTENAS -->
+            <div class="remote-group">
+                <div class="remote-group-title">ESTADO DE ANTENAS</div>
+                <div class="btn-grid">
+                    <button id="rc-toggle-front" class="rc-btn active">DELANTERA: ON</button>
+                    <button id="rc-toggle-rear" class="rc-btn active">TRASERA: ON</button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN BLOQUEO -->
+            <div class="remote-group">
+                <div class="remote-group-title">FIJACIÓN / BLOQUEO</div>
+                <div class="btn-grid">
+                    <button id="rc-lock-front" class="rc-btn btn-lock">FIJAR DELANTERO</button>
+                    <button id="rc-lock-rear" class="rc-btn btn-lock">FIJAR TRASERO</button>
+                    <button id="rc-unlock-all" class="rc-btn btn-warning full-width">DESBLOQUEAR AMBOS</button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN LÍMITE RÁPIDO -->
+            <div class="remote-group">
+                <div class="remote-group-title">LÍMITE ALERTA DE VELOCIDAD</div>
+                <div class="limit-controller">
+                    <button id="rc-limit-minus" class="rc-btn-circle">-</button>
+                    <span id="rc-limit-display" class="limit-val">120 KM/H</span>
+                    <button id="rc-limit-plus" class="rc-btn-circle">+</button>
+                </div>
+            </div>
+
+            <!-- SECCIÓN AJUSTES RÁPIDOS -->
+            <div class="remote-group">
+                <div class="remote-group-title">PREFERENCIAS</div>
+                <div class="btn-grid">
+                    <button id="rc-toggle-unit" class="rc-btn">UNIDAD: KM/H</button>
+                    <button id="rc-toggle-audio" class="rc-btn active">AUDIO: ON</button>
+                    <button id="rc-reset-pos" class="rc-btn full-width">CENTRAR POSICIÓN RADAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
